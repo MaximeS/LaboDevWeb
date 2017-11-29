@@ -36,7 +36,7 @@ module.exports.routes = {
     view: 'homepage'
   },
 
-  'post /admin/updatepermissionlevel' : 'UserController.grantPermission',
+  'post /admin/updatepermissionlevel' : 'AdminController.grantPermission',
 
   /***************************************************************************
   *                                                                          *

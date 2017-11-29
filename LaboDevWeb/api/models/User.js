@@ -35,7 +35,8 @@ module.exports = {
     subscriptionList:{
       type:'string',
       defaultsTo:""
-    }
+    },
+    
   }
 };
 
