@@ -60,7 +60,17 @@ module.exports = {
                             return res.json(403,"Cannot delete "+ req.param('username')+".");
                         })
                     }
-                    return res.json(403,"Cannot find messages of "+req.param('username')+".");
+                    else{
+                        return User.destroy({username: req.param('username')})
+                        .exec(function(err,destroyed){
+                            if(destroyed)
+                            {
+                                return res.json(200,"User "+ req.param('username')+" has been deleted.")
+                            }
+                            return res.json(403,"Cannot delete "+ req.param('username')+".");
+                        })
+                    }
+                   
                 })
             }
             return res.json(403,"Cannot find user with "+req.param('username')+" as username.");

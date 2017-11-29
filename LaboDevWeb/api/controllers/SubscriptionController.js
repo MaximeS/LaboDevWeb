@@ -45,23 +45,19 @@ module.exports = {
           User.findOne({id: req.param('id')})
           .exec(function(err,user){
               if(user){
-                  return User.findOne({username: req.param('subscriptionUsername')})
-                  .exec(function(err,user){
-                     if(user)
-                     {
-                         return User.update({id: req.param('id')},{subscriptionList: user.subscriptionList+req.param('subscriptionUsername')+","})
-                         .exec(function(err,updated){
-                             if(updated)
-                             {
-                                 return res.json(200,{message:"You're now subscribed to "+ req.param('subscriptionUsername'+ ".")});
-                             }
-                             return res.json(403,{message: "Error cannot subscribe to "+ req.param('subscriptionUsername'+".")});
-                         })
-                     }
-                  })
-              }
-              return res.json(403,"Error cannot find your own id")
-          })
+                return User.findOne({username: req.param('subscriptionName')})
+                .exec(function(err,user){
+                        if(user){
+                            Subscription.create({owner: req.param('id'),subscription: user.id})
+                            .then(function(){
+                                return res.json(200,{message:"You've been successfully subscribed to "+ req.param('subscriptionName')});
+                            });
+                        }
+                        return res.json(403,{message:"Cannot find user "+ req.param('subscriptionName')});
+                    })
+                }
+              return res.json(403,"Error cannot find your own id");
+             })
       },
       /**
        * Delete a subscription to someone.
@@ -73,10 +69,10 @@ module.exports = {
                   return User.findOne({username: req.param('subscriptionUsername')})
                   .exec(function(err,user){
                       if(user){
-                          User.update({id: req.param('id')},
-                          {subscriptionList: substring(user.subscriptionList.indexOf(
-                             req.param('subscriptionUsername')),user.subscriptionList.indexOf(req.param('subscriptionUsername')+
-                             req.param('subscriptionUsername').length+1))})
+                          return User.update({id: req.param('id')},
+                          {subscriptionList: user.subscriptionList.substring(user.subscriptionList.indexOf(
+                             req.param('subscriptionUsername')),
+                             user.subscriptionList.indexOf(req.param('subscriptionUsername')+req.param('subscriptionUsername').length+1))})
                           .exec(function(err,updated){
                              if(updated)
                              {

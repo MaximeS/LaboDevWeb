@@ -35,9 +35,24 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-
+  /**
+   * Admin routes
+   */
   'post /admin/updatepermissionlevel' : 'AdminController.grantPermission',
+  'post /admin/deleteuser' : 'AdminController.deleteAUser',
 
+  /**
+   * Subscription routes
+   */
+  'get /subscription/getsubscriptionbyid/:id' : 'SubscriptionController.getSubscriptionById',
+  'get /subscription/getsubscriptionbytagname/:username' : 'SubscriptionController.getSubscriptionByTagName',
+  'post /subscription/subscribetosomeone' : 'SubscriptionController.subscribeToSomeone',
+  'post /subscription/deleteasubscription' : 'SubscriptionController.deleteASubscription',
+
+  /**
+   * User management routes
+   */
+  'post /user/createuser' : 'UserCOntroller.createUser',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
