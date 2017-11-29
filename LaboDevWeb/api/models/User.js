@@ -31,6 +31,10 @@ module.exports = {
     rank:{
       type:'int',
       defaultsTo:1
+    },
+    subscriptionList:{
+      type:'string',
+      defaultsTo:""
     }
   }
 };
