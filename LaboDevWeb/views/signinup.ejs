@@ -1,0 +1,60 @@
+<div id="err" style="display:none">
+    <p>Wrong Username/Password</p>
+</div>
+<div ng-controller="login">
+    <form novalidate class="simple-form">
+        Nom de compte: <input type="text" ng-model="login.username" /><br />
+        Password: <input type="password" ng-model="login.password" /><br />                             
+        <input type="button" ng-click="reset()" value="Reset" />
+        <input type="submit" ng-click="signin(user)" value="Se connecter" />
+	</form>    
+</div>
+
+<div ng-controller="adduser">
+    <form novalidate class="simple-form">
+        Nom de compte: <input type="text" ng-model="user.username" /><br />
+        Pseudo: <input type="text" ng-model="user.nickname" /><br />
+        Password: <input type="password" ng-model="user.password" /><br /> 
+        Prénom: <input type="text" ng-model="user.firstName" /><br />
+        Nom de famille: <input type="text" ng-model="user.lastName" /><br />                                  
+        <input type="button" ng-click="reset()" value="Reset" />
+        <input type="submit" ng-click="signup(user)" value="S'incrire" />
+	</form>    
+</div>
+
+<script type="text/javascript">
+    if(cookieExistant("access_token"))
+    {
+        document.location.href="http://localhost:1337/"
+    }
+    angular.module('totter', [])
+	  .controller('adduser', ['$scope','$http', function($scope,$http) {
+        $scope.master={};
+   		$scope.signup=function(user){
+			$http.post("http://localhost:1337/auth/signup",$scope.user).then(function(){
+                document.location.href="http://localhost:1337";
+                });
+			};
+
+     	$scope.reset = function() {
+      		$scope.user = angular.copy($scope.master);
+      	};
+      $scope.reset();
+    }])
+    .controller('login',['$scope','$http',function($scope,$http){
+        $scope.master={};
+   		$scope.signin=function(login){
+			$http.post("http://localhost:1337/auth/signin",$scope.login).then(function(res){
+                document.location.href="http://localhost:1337";
+                }).catch(function(err){
+                    console.log(err);
+                   document.getElementById("err").style.display="block"; 
+                });
+			};
+
+     	$scope.reset = function() {
+      		$scope.login = angular.copy($scope.master);
+      	};
+      $scope.reset();
+    }]);
+</script>

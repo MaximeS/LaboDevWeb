@@ -9,11 +9,11 @@ module.exports = {
 
   attributes: {
     owner:{
-      model:User,
+      model:'User',
       required:true,
     },
     subscription:{
-      model:User,
+      model:'User',
       required:true,
     }
   }

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%=typeof title == 'undefined' ? 'New Sails App' : title%></title>
+<html ng-app="totter">
 
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<head>
+  <title>
+    <%=typeof title == 'undefined' ? 'Totter' : title%>
+  </title>
+
+  <!-- Viewport mobile tag for sensible mobile support -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
-    <!--
+  <!--
         Stylesheets and Preprocessors
         ==============================
 
@@ -28,13 +31,20 @@
             + Use a different or additional preprocessor, like SASS, SCSS or Stylus
     -->
 
-    <!--STYLES-->
-    <link rel="stylesheet" href="/styles/importer.css">
-    <!--STYLES END-->
-  </head>
+  <!--STYLES-->
+  <link rel="stylesheet" href="/styles/importer.css">
+  <!--STYLES END-->
 
-  <body>
-    <%- body %>
+  <!--SCRIPTS-->
+  <script src="/js/dependencies/sails.io.js"></script>
+  <script src="/js/dependencies/angular.js"></script>
+  <script src="/js/dependencies/cookieChecking.js"></script>
+  <script src="/js/dependencies/jquery-3.3.1.slim.js"></script>
+  <!--SCRIPTS END-->
+</head>
+
+<body>
+  <%- body %>
 
 
 
@@ -89,6 +99,10 @@
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/cookieChecking.js"></script>
+    <script src="/js/dependencies/jquery-3.3.1.slim.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
     <!--SCRIPTS END-->
-  </body>
+</body>
+
 </html>

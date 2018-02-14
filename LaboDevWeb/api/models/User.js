@@ -32,6 +32,18 @@ module.exports = {
       type:'int',
       defaultsTo:1
     },
+    messages:{
+      collection:'message',
+      via:'owner'
+    },
+    toJSON: function () {
+      var obj = this.toObject();
+      delete obj.password;
+      delete obj.createdAt;
+      delete obj.updatedAt;
+      /*  delete obj.id;*/
+      return obj;
+  }
 
   }
 };

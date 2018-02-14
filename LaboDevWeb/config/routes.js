@@ -33,8 +33,17 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
+    view: 'timeline'
   },
+  '/signinup':{
+    view: 'signinup'
+  },
+  /**
+   * Auth routes
+   */
+
+  'post /auth/signin'  : 'AuthController.signin',
+  'post /auth/signup'  : 'AuthController.signup',
   /**
    * Admin routes
    */

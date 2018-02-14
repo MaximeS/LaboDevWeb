@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	createUser:function(req,res){
+	createUser:function(user){
         User.create(_.omit(req.allParams(),'id')).then(function(user){
             User.findOne({username: req.param('username')})
             .exec(function(err,user){
@@ -17,7 +17,6 @@ module.exports = {
                 return res.json(403,{message: "User creation failed"});
             })
         });
-        // console.log(req.param('username'));
         
     }
 };
