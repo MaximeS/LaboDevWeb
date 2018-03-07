@@ -10,7 +10,7 @@ module.exports  = {
         }
     },
     comparePassword: function (password,user){
-        return bcrypt.compareSync(password, user.password)
+        return bcrypt.compareSync(password, user.password);
     },
 
     createToken : function(user)

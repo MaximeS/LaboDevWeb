@@ -14,14 +14,14 @@ module.exports = {
     signin: function (req,res)
     {
         User.findOne({"username":req.param("username")}).then(function(foundUser,err){
-            if(foundUser){
-                delete foundUser.password;
+            if(foundUser && SecurityService.comparePassword(req.param("password"),foundUser))
+            {
                 delete foundUser.createdAt;
                 delete foundUser.updatedAt;
                 var expDate = new Date();
                 expDate.setDate(expDate.getDate() + 2);
                 token = SecurityService.createToken(foundUser);
-                res.cookie("access_token", token, { httpOnly: false, expires: expDate });
+                res.cookie("access_token", token, { httpOnly: true, expires: expDate });
                 return res.ok (
                     {
                         token : token,
@@ -42,7 +42,7 @@ module.exports = {
                 expDate=new Date();
                 expDate.setDate(expDate.getDate() + 2);
                 token = SecurityService.createToken(user);
-                res.cookie("access_token",token,{httpOnly:false,expires:expDate})
+                res.cookie("access_token",token,{httpOnly:true,expires:expDate})
                 return {
                     user: user,
                     token: token
@@ -53,6 +53,41 @@ module.exports = {
             .catch(res.serverError)
     },
 	signout : function (req, res) {
-		res.cookie("access_token", "", { httpOnly: false, expires: new Date(0) })
-	}
+        res.cookie("access_token", "", { httpOnly: true, expires: new Date(0) });
+    },
+    checkCookie: function(req,res){
+        if(req.user){
+            User.findOne({"username":req.user.username}).then(function(foundUser,err){
+                if(foundUser){
+                    if(SecurityService.comparePassword(req.user.password,foundUser))
+                    {
+                        console.log("found");
+                        delete foundUser.createdAt;
+                        delete foundUser.updatedAt;
+                        var expDate = new Date();
+                        expDate.setDate(expDate.getDate() + 2);
+                        token = SecurityService.createToken(foundUser);
+                        res.cookie("access_token", token, { httpOnly: true, expires: expDate });
+                        return res.ok (
+                            {
+                                token : token,
+                                foundUser:foundUser
+                            }
+                        );
+                    }
+                    else
+                    {
+                        res.cookie("access_token","",{httpOnly:true,expires: new Date(0)})
+                    }
+                }
+                else
+                {
+                    res.cookie("access_token","",{httpOnly:true,expires: new Date(0)})
+                }
+            })
+        }
+        else{
+            return res.ok();
+        }
+    }
 };

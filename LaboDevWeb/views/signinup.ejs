@@ -1,12 +1,12 @@
 <div id="err" style="display:none">
     <p>Wrong Username/Password</p>
 </div>
-<div ng-controller="login">
+<div data-ng-controller="login">
     <form novalidate class="simple-form">
-        Nom de compte: <input type="text" ng-model="login.username" /><br />
-        Password: <input type="password" ng-model="login.password" /><br />                             
+        Nom de compte: <input type="text" ng-model="logs.username" /><br />
+        Password: <input type="password" ng-model="logs.password" /><br />                             
         <input type="button" ng-click="reset()" value="Reset" />
-        <input type="submit" ng-click="signin(user)" value="Se connecter" />
+        <input type="submit" ng-click="signin(logs)" value="Se connecter" />
 	</form>    
 </div>
 
@@ -23,16 +23,13 @@
 </div>
 
 <script type="text/javascript">
-    if(cookieExistant("access_token"))
-    {
-        document.location.href="http://localhost:1337/"
-    }
-    angular.module('totter', [])
-	  .controller('adduser', ['$scope','$http', function($scope,$http) {
+    console.log(window.debug);
+    app.controller('adduser', ['$scope','$http', function($scope,$http) {
         $scope.master={};
    		$scope.signup=function(user){
-			$http.post("http://localhost:1337/auth/signup",$scope.user).then(function(){
-                document.location.href="http://localhost:1337";
+			$http.post("http://localhost:1337/auth/signup",$scope.user).then(function(res){
+                console.log(res.data);
+                 document.location.href="http://localhost:1337";
                 });
 			};
 
@@ -41,10 +38,11 @@
       	};
       $scope.reset();
     }])
-    .controller('login',['$scope','$http',function($scope,$http){
+    app.controller('login',['$scope','$http',function($scope,$http){
         $scope.master={};
-   		$scope.signin=function(login){
-			$http.post("http://localhost:1337/auth/signin",$scope.login).then(function(res){
+   		$scope.signin=function(logs){
+			$http.post("http://localhost:1337/auth/signin",$scope.logs).then(function(res){
+                console.log(res.data);
                 document.location.href="http://localhost:1337";
                 }).catch(function(err){
                     console.log(err);
@@ -56,5 +54,6 @@
       		$scope.login = angular.copy($scope.master);
       	};
       $scope.reset();
-    }]);
+    }])
+    ;
 </script>
