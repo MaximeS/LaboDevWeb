@@ -29,7 +29,6 @@ module.exports.policies = {
  '*' : [ 'isAuthenticated' ],
  AuthController:{
    '*':true,
-   checkCookie:[ 'isAuthenticated' ],
   //  signin:true,
  }
 

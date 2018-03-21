@@ -62,7 +62,13 @@ module.exports.routes = {
   /**
    * User management routes
    */
-  'post /user/createuser' : 'UserCOntroller.createUser',
+  'post /user/createuser' : 'UserController.createUser',
+
+  /**
+   * Tots routes
+   */
+  'get /messages/followedTots':'MessageController.getTimeLineMessage',
+  'post /messages/addTot':'MessageController.addMessage',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

@@ -9,6 +9,7 @@
 var passport = require ('passport');
 
 
+
 module.exports = {
 
     signin: function (req,res)
@@ -22,6 +23,7 @@ module.exports = {
                 expDate.setDate(expDate.getDate() + 2);
                 token = SecurityService.createToken(foundUser);
                 res.cookie("access_token", token, { httpOnly: true, expires: expDate });
+                console.log(token);
                 return res.ok (
                     {
                         token : token,

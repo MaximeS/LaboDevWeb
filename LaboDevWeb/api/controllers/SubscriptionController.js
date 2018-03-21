@@ -28,32 +28,65 @@ module.exports = {
      getSubscriptionByTagName: function(req,res){
          User.findOne({username: req.param('username')})
          .exec(function(err,user){
-             if(user && user.subscriptionList!="")
+             if(user)
              {
-                 return res.json(200,{subscriptionList: user.subscriptionList});
+                 Subscription.find({owner:user.id})
+                 .exec(function(err,subscriptionList){
+                     var ctr=0;
+                     if(subscriptionList){
+                         subscriptionList.forEach(subscription => {
+                             delete subscription.owner;
+                             User.findOne({id:subscription.subscription})
+                             .exec(function(err,user){
+                                 if (user)
+                                 {
+                                     subscription.subscription=user;
+                                 }
+                                 else if(err){
+                                     subscription.subscription="User deleted";
+                                 }
+                                 else
+                                 {
+                                     subscription.subscription="";
+                                 }
+                                 ctr++;
+                                 if(ctr=== subscriptionList.length)
+                                 {
+                                    return res.json(200,subscriptionList);
+                                 }
+                             })
+                         })
+                        
+                     }
+                     else{
+                        return res.json(200,{subscriptionList: "No subscription"});
+                     }
+                 });
              }
-             else if (user && user.subscriptionList==""){
-                  return res.json(200,{subscriptionList: "No subscription"});
+             else {
+                  return res.json(403,{message: "Error User not found"})
              }
-             return res.json(403,{message: "Error User not found"})
+            
          }) 
       },
       /**
        * Subscribe to someone by pressing a button
        */
       subscribeToSomeone: function(req,res){
-          User.findOne({id: req.param('id')})
+          User.findOne({id: req.user.id})
           .exec(function(err,user){
               if(user){
-                return User.findOne({username: req.param('subscriptionName')})
-                .exec(function(err,user){
-                        if(user){
-                            Subscription.create({owner: req.param('id'),subscription: user.id})
+                return User.findOne({"username": req.param('subscriptionName')})
+                .exec(function(err,seconduser){
+                        if(seconduser){
+                            Subscription.findOrCreate({owner: user.id,subscription: seconduser.id},{owner: user.id,subscription: seconduser.id})
                             .then(function(){
                                 return res.json(200,{message:"You've been successfully subscribed to "+ req.param('subscriptionName')});
                             });
                         }
-                        return res.json(403,{message:"Cannot find user "+ req.param('subscriptionName')});
+                        else{
+                            return res.json(403,{message:"Cannot find user "+ req.param('subscriptionName')});
+                        }
                     })
                 }
               return res.json(403,"Error cannot find your own id");

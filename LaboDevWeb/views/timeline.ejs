@@ -1,0 +1,13 @@
+<div ng-controller="tottimeline">
+    <div ng-repeat="followedtot in followedtots">
+        <P>{{followedtot.fullMessage}}</P>
+        <a href="http://localhost:1337/{{followedtot.User.id}}">{{followedtot.User.username}}</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.controller('tottimeline',['$scope','$http',function($scope,$http){
+        $http.get()
+    }])
+
+</script>

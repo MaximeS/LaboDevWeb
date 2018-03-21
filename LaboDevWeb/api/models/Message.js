@@ -15,10 +15,6 @@ module.exports = {
     fullMessage:{
       type:'string',
       required:true,
-    },
-    publicationDate:{
-      type:'Date',
-      required:true,
     }
   }
 };
