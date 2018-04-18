@@ -1,0 +1,26 @@
+<div ng-controller="updateprofile">
+    <form novalidate>
+        Pseudo:<input type="text" ng-model="user.username"/>
+        NickName:<input type="text" ng-model="user.nickname">
+        FirstName:<input type="text" ng-model="user.firstName">
+        LastName:<input type="text" ng-model="user.LastName">
+        Password:<input type="password" ng-model="user.password">
+        <input type="submit" ng-click="changeProfile(user)" value="Send">
+    </form>
+</div>
+
+<script type="text/javascript">
+    app.controller('updateprofile',['$scope','$http',function($scope,$http){
+        $scope.user=[]
+        $http.get("http://localhost:1337/user/me").then((res)=>{
+            $scope.user=res.data.user
+        })
+        $scope.changeProfile=function(user){
+            $http.post("http://localhost:1337/user/changeprofile",user).then((res)=>{
+                if(res.status=200){
+                    document.location.href="http://localhost:1337/"
+                }
+            })
+        }
+    }])
+</script>

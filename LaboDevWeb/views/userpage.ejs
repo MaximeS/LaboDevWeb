@@ -1,0 +1,54 @@
+<div ng-controller="userprofile">
+    <h2>User</h2>
+    <div>
+        <span>{{user.username}}</span>
+        <span>{{user.nickname}}</span>
+        <span>{{user.fistName}}</span>
+        <span>{{user.lastName}}</span>
+        <div ng-switch="subscribed">
+            <div ng-switch-when="subscribed">
+                <button ng-click="unsubscribe(user)">Unsubscribe</button>
+            </div>
+            <div ng-switch-when="you">
+                <button disabled>It's you</button>
+            </div>
+            <div ng-switch-default>
+                <button ng-click="subscribe(user)">Subscribe</button>
+            </div>
+        </div>
+        
+    </div>
+<br/>
+<h2>Tots</h2>
+    <div ng-repeat="message in messages">
+        <span>{{message.fullMessage}}</span><br/>
+        <span>Sent on:{{message.createdAt}}</span>
+    </div>
+</div>
+<script type="text/javascript">
+    app.controller('userprofile',['$scope','$http','$location',function($scope,$http,$location){
+        var currentUrl=new URL(window.location.href)
+        $scope.user=[]
+        $scope.messages=[]
+        $scope.subscribed="notsubscribed"
+        $http.get("http://localhost:1337/user/username/"+currentUrl.searchParams.get("username")).then((res)=>{
+             $scope.user=res.data.user
+         })
+         $http.get("http://localhost:1337/messages/"+currentUrl.searchParams.get("username")).then((res)=>{
+             $scope.messages=res.data.messages
+         })
+         $http.get("http://localhost:1337/subscription/checkSubscription/"+currentUrl.searchParams.get("username")).then((res)=>{
+             $scope.subscribed=res.data.subscribed
+         })
+         $scope.subscribe=function(user){
+             $http.post("http://localhost:1337/subscription/subscribetosomeone",{subscriptionUsername:user.username}).then((res)=>{
+                location.reload()
+             })
+         }
+         $scope.unsubscribe=function(user){
+             $http.post("http://localhost:1337/subscription/deleteasubscription",{username:user.username}).then((res)=>{
+                 location.reload()
+             })
+         }
+    }])
+</script>

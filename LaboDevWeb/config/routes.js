@@ -33,10 +33,19 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'timeline'
+    view: 'timeline',
   },
   '/signinup':{
     view: 'signinup'
+  },
+  '/userpage':{
+    view:'userpage'
+  },
+  '/disconnect':{
+    view:'disconnect'
+  },
+  '/updateprofile':{
+    view:'updateprofile'
   },
   /**
    * Auth routes
@@ -44,6 +53,7 @@ module.exports.routes = {
 
   'post /auth/signin'  : 'AuthController.signin',
   'post /auth/signup'  : 'AuthController.signup',
+  'get /auth/signout':'AuthController.signout',
   'get /auth/checkmycookie':'AuthController.checkCookie',
   /**
    * Admin routes
@@ -58,17 +68,22 @@ module.exports.routes = {
   'get /subscription/getsubscriptionbytagname/:username' : 'SubscriptionController.getSubscriptionByTagName',
   'post /subscription/subscribetosomeone' : 'SubscriptionController.subscribeToSomeone',
   'post /subscription/deleteasubscription' : 'SubscriptionController.deleteASubscription',
+  'get /subscription/checkSubscription/:username' : 'SubscriptionController.checkSubscription',
 
   /**
    * User management routes
    */
   'post /user/createuser' : 'UserController.createUser',
-
+  'get /user/username/:username':'UserController.getUser',
+  'get /user/search/:userPartial':'UserController.findUsers',
+  'get /user/search/':'UserController.findUsers',
+  'get /user/me':'UserController.me',
   /**
    * Tots routes
    */
   'get /messages/followedTots':'MessageController.getTimeLineMessage',
   'post /messages/addTot':'MessageController.addMessage',
+  'get /messages/:username':'MessageController.getUserMessages',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

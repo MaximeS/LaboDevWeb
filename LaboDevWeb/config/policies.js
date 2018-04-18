@@ -27,6 +27,9 @@ module.exports.policies = {
   ***************************************************************************/
 
  '*' : [ 'isAuthenticated' ],
+ UserController:{
+   me:true,
+ },
  AuthController:{
    '*':true,
   //  signin:true,

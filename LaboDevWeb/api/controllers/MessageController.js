@@ -24,6 +24,7 @@ module.exports = {
             .find({ owner: req.user.id })
             .exec(function (err, subscriptions) {
                 if (err) {
+                    console.log(err)
                     return res.json(200, { followedtots: "No subscription before checking your followed foes tots" })
                 }
                 var ctr = 0
@@ -55,6 +56,21 @@ module.exports = {
     },
     deleteMessage: function (req, res) {
 
+    },
+    getUserMessages: function(req,res){
+        User.findOne({username:req.param('username')},function(err,user){
+            if(user)
+            {
+                return Message.find({owner: user.id},function(err,messages){
+                    if(messages)
+                    {
+                        return res.json(200,{messages:messages})
+                    }
+                    return res.json(404,{message:"No messages for this user"})
+                })
+            }
+            return res.json(404,{message:"User not found"})
+        })
     }
 };
 

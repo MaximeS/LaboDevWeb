@@ -76,49 +76,61 @@ module.exports = {
           User.findOne({id: req.user.id})
           .exec(function(err,user){
               if(user){
-                return User.findOne({"username": req.param('subscriptionName')})
+                return User.findOne({"username": req.param('subscriptionUsername')})
                 .exec(function(err,seconduser){
                         if(seconduser){
                             Subscription.findOrCreate({owner: user.id,subscription: seconduser.id},{owner: user.id,subscription: seconduser.id})
                             .then(function(){
-                                return res.json(200,{message:"You've been successfully subscribed to "+ req.param('subscriptionName')});
+                                return res.json(200,{message:"You've been successfully subscribed to "+ req.param('subscriptionUsername')});
                             });
                         }
                         else{
-                            return res.json(403,{message:"Cannot find user "+ req.param('subscriptionName')});
+                            return res.json(403,{message:"Cannot find user "+ req.param('subscriptionUsername')});
                         }
                     })
                 }
-              return res.json(403,"Error cannot find your own id");
+              return res.json(404,"Error cannot find your own id");
              })
       },
       /**
        * Delete a subscription to someone.
        */
       deleteASubscription: function(req,res){
-          User.findOne({id: req.param('id')})
-          .exec(function(err,user){
-              if(user){
-                  return User.findOne({username: req.param('subscriptionUsername')})
-                  .exec(function(err,user){
-                      if(user){
-                          return User.update({id: req.param('id')},
-                          {subscriptionList: user.subscriptionList.substring(user.subscriptionList.indexOf(
-                             req.param('subscriptionUsername')),
-                             user.subscriptionList.indexOf(req.param('subscriptionUsername')+req.param('subscriptionUsername').length+1))})
-                          .exec(function(err,updated){
-                             if(updated)
-                             {
-                                 return res.json(200,{message: "You're not subscribed to "+ req.param('subscriptionUsername') + " anymore."});
-                             }    
-                             return res.json(403,{message: "Error cannot cancel your subscription to "+ req.param('subscriptionUsername')});
-                          })
-                      }
-                      return res.json(403,{message: "Error cannot find your subscription"});
-                  })
-                  return res.json(403,{message: "Error cannot find your own id"});
-              }
-          })
-      }
+        User.findOne({username:req.param("username")},function(err,user){
+            if(user){
+                return Subscription.findOne({owner:req.user.id,subscription:user.id},function(err,subscription){
+                    if(subscription)
+                    {
+                        return Subscription.destroy({id:subscription.id},function(err,deleted){
+                            if(deleted)
+                            {
+                                return res.json(200,{message:"deleted"})
+                            }
+                            return res.json(401,{message:"not deleted"})
+                        })
+                        return res.json(404,{message:"subscription not found"})
+                    }
+                })
+            }
+            return res.json(404,{message:"User not found"})
+        })
+    },
+
+    checkSubscription:function(req,res){
+        User.findOne({username:req.param("username")},function(err,user){
+            if(user){
+                if(user.id!=req.user.id){
+                    return Subscription.findOne({owner:req.user.id,subscription:user.id},function(err,subscription){
+                        if(subscription){
+                            return res.json(200,{subscribed:"subscribed"})
+                        }
+                        return res.json(200,{subscribed:"notsubscribed"})
+                    })
+                }
+               return res.json(200,{subscribed:"you"})
+            }
+            return res.json(404,{message:"not found"})
+        })
+    }
 };
 

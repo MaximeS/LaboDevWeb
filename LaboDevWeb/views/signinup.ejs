@@ -23,12 +23,10 @@
 </div>
 
 <script type="text/javascript">
-    console.log(window.debug);
     app.controller('adduser', ['$scope','$http', function($scope,$http) {
         $scope.master={};
    		$scope.signup=function(user){
 			$http.post("http://localhost:1337/auth/signup",$scope.user).then(function(res){
-                console.log(res.data);
                  document.location.href="http://localhost:1337";
                 });
 			};

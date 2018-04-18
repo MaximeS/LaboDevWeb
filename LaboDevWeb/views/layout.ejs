@@ -32,6 +32,12 @@
     -->
 
   <!--STYLES-->
+  <link rel="stylesheet" href="/styles/bootstrap-grid.css">
+  <link rel="stylesheet" href="/styles/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="/styles/bootstrap-reboot.css">
+  <link rel="stylesheet" href="/styles/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="/styles/bootstrap.css">
+  <link rel="stylesheet" href="/styles/bootstrap.min.css">
   <link rel="stylesheet" href="/styles/importer.css">
   <!--STYLES END-->
 
@@ -49,31 +55,49 @@
   
   <script type="text/javascript">
   const app = angular.module('totter',[])
-  //   document.addEventListener("DOMContentLoaded", function(event) {
-        
-  //           $http.get("http://localhost:1337/auth/checkmycookie").then(function(res)
-  //           {
-  //             window.debug="Je suis passé par la vérif de cookie";
-  //             if(res.data!="" && document.location.href=="http://localhost:1337/signinup")
-  //             {
-  //               document.location.href="http://localhost:1337/";
-  //             }
-  //             if(res.data=="" && document.location.href=="http://localhost:1337/signinup")
-  //             {
-
-  //               document.location.href="http://localhost:1337/signinup";
-  //             }
-  //           })
-  //       }
-  //   );
+  
     
       
   </script>
   <!--SCRIPTS END-->
   <%- body %>
 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top" ng-controller="layout">
+    <a href="http://localhost:1337/" class="navbar-brand">Totter</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active"><a href="http://localhost:1337/" class="nav-link">Home</a></li>
+      <li class="nav-item active"><a href="http://localhost:1337/disconnect" class"nav-link">Disconnect</a></li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0" >
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" ng-keyup="searchusers()" ng-model="user">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <div ng-repeat="user in users">
+        <a href="http://localhost:1337/userpage?username={{user.username}}">{{user.username}}</a>
+      </div>
+    </form>
+  </div>
+  </nav>
 
 
+  <script type="text/javascript">
+    app.controller('layout',['$scope','$http',function($scope,$http){
+    $scope.users=[]
+    $scope.searchusers=function(){
+      $http.get('http://localhost:1337/user/search/'+$scope.user).then((res)=>{
+        if(res.data.users)
+        {
+          $scope.users=res.data.users
+        }
+        else
+        {
+          $scope.users=[]
+        }
+      })
+    }
+  }])
+  </script>
     <!--
         Client-side Templates
         ========================

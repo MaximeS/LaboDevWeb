@@ -1,13 +1,53 @@
 <div ng-controller="tottimeline">
-    <div ng-repeat="followedtot in followedtots">
-        <P>{{followedtot.fullMessage}}</P>
-        <a href="http://localhost:1337/{{followedtot.User.id}}">{{followedtot.User.username}}</a>
+    <h2>Me</h2>
+    <div>
+        <a href="/userpage?username={{me.username}}">{{me.username}}</a>
+        <span>{{me.nickname}}</span>
+        <span>{{me.fistName}}</span>
+        <span>{{me.lastName}}</span>
+    </div>
+    <br/>
+<h2>Send Tot</h2>
+    <div>
+        <form novalidate class="simple-form">
+            <input type="text" ng-model="message">
+            <input type="submit" ng-click="sendTot(message)">
+        </form>
+    </div>
+    <br/>
+<h2> Tots</h2>
+    <div>
+        <div ng-repeat="followedtot in followedtots">
+            <P>{{followedtot.fullMessage}}</P>
+            <a href="http://localhost:1337/userpage?username={{followedtot.owner.username}}">{{followedtot.owner.username}}</a>
+            <span> Sent on : {{followedtot.createdAt}}</span>
+        </div>
     </div>
 </div>
-
 <script type="text/javascript">
-    app.controller('tottimeline',['$scope','$http',function($scope,$http){
-        $http.get()
+    app.controller('tottimeline', ['$scope', '$http', function ($scope, $http) {
+        $scope.followedtots = []
+        followedtotstempo = []
+        $scope.me = []
+        $http.get("http://localhost:1337/user/me").then((res) => {
+            $scope.me = res.data.user
+        })
+        $scope.getTots = function () {
+            $http.get("http://localhost:1337/messages/followedTots").then((res) => {
+                followedtotstempo = res.data.followedtots
+                followedtotstempo.forEach(followedtot => {
+                    $http.get("http://localhost:1337/user/" + followedtot.owner).then((res) => {
+                        followedtot.owner = res.data
+                    })
+                });
+                $scope.followedtots = followedtotstempo
+            })
+        }
+        $scope.sendTot = function (message) {
+            $http.post("http://localhost:1337/messages/addTot", { fullMessage: message }).then((res) => {
+                $scope.getTots()
+            })
+        }
+        $scope.getTots()
     }])
-
 </script>

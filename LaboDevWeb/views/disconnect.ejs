@@ -1,0 +1,10 @@
+<div ng-controller="disconnect">
+
+</div>
+<script type="text/javascript">
+    app.controller('disconnect',['$scope','$http',function($scope,$http){
+        $http.get("http://localhost:1337/auth/signout").then((res)=>{
+            document.location.href="http://localhost:1337/signinup"
+        })
+    }])
+</script>
