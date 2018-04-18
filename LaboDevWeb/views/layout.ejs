@@ -84,6 +84,12 @@
   <script type="text/javascript">
     app.controller('layout',['$scope','$http',function($scope,$http){
     $scope.users=[]
+    $http.get("http://localhost:1337/user/me").then((res) => {
+            if(res.status!=200 && document.location.href!="http://localhost:1337/signinup")
+            {
+              document.location.href="http://localhost:1337/signinup"
+            }
+        })
     $scope.searchusers=function(){
       $http.get('http://localhost:1337/user/search/'+$scope.user).then((res)=>{
         if(res.data.users)
