@@ -14,6 +14,7 @@ module.exports = {
 
     signin: function (req,res)
     {
+        console.log(req.allParams())
         User.findOne({"username":req.param("username")}).then(function(foundUser,err){
             if(foundUser && SecurityService.comparePassword(req.param("password"),foundUser))
             {

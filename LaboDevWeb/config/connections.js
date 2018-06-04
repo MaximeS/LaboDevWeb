@@ -42,10 +42,11 @@ module.exports.connections = {
   ***************************************************************************/
    someMysqlServer: {
      adapter: 'sails-mysql',
-     host: '127.0.0.1',
+     host: 'localhost',
      user: 'root', //optional
-    // password: 'YOUR_MYSQL_PASSWORD', //optional
-     database: 'labodevweb' //optional
+     password: 'root', //optional
+     database: 'labodevweb', //optional
+     socketPath: '/Applications/MAMP/tmp/mysql/mysql.sock'
    },
 
   /***************************************************************************

@@ -36,6 +36,7 @@ module.exports = {
         }
     },
     me:function(req,res){
+        console.log(req.user)
         if(req.user){
             User.findOne({id:req.user.id},function(err,user){
                 if(user)
