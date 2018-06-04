@@ -61,6 +61,15 @@ module.exports = {
             return res.json(404,{message:"User not found"})
         })
     },
+    getUserbyId:function(req,res){
+        User.findOne({id:req.param('id')},function(err,user){
+            if(user)
+            {
+                return res.json(200,{user:user})
+            }
+            return res.json(404,{message:"User not found"})
+        })
+    },
     updateProfile:function(req,res){
         // User.findOne({id:req.user.id},function(err,user){
         //     if(user)

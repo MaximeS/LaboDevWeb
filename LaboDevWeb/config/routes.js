@@ -73,6 +73,7 @@ module.exports.routes = {
   /**
    * User management routes
    */
+  'get /user/getuserbyid/:id' : 'UserController.getUserbyId',
   'post /user/createuser' : 'UserController.createUser',
   'get /user/username/:username':'UserController.getUser',
   'get /user/search/:userPartial':'UserController.findUsers',
